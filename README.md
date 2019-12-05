@@ -19,19 +19,19 @@ The second measure of success will be feedback from the team - I expect people t
 
 These specific use cases we'll be demonstrated:
 
-[ ] Pure JS / TS functions
+- [ ] Pure JS / TS functions
 
-[ ] Mocking imports
+- [ ] Mocking imports
 
-[ ] Functional component using hooks
+- [ ] Functional component using hooks
 
-[ ] Redux connected component
+- [ ] Redux connected component
 
-[ ] Redux reducer
+- [ ] Redux reducer
 
-[ ] Redux thunk
+- [ ] Redux thunk
 
-[ ] State machine driven component (stretch goal as it's unclear if we'll make use of these)
+- [ ] State machine driven component (stretch goal as it's unclear if we'll make use of these)
 
 ## Use cases outside of scope
 
