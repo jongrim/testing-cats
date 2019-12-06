@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CatImage } from "ts/Cat";
 
 const cats = axios.create({
   baseURL: "https://api.thecatapi.com/v1/",
@@ -6,14 +7,6 @@ const cats = axios.create({
     "x-api-key": "06e74068-b14e-411e-8682-978b63c833ed"
   }
 });
-
-export interface CatImage {
-  breeds: string[];
-  height: number;
-  id: string;
-  url: string;
-  width: number;
-}
 
 interface CatImageResponse {
   data: CatImage[];

@@ -1,9 +1,13 @@
 import React, { useEffect, useReducer } from "react";
-import { getCatImages, CatImage } from "api/cats";
+import { ConnectedProps } from "react-redux";
+import * as R from "ramda";
+import { CatImage } from "ts/Cat";
+import { getCatImages } from "./api/cats";
+import withCatCollection from "./withCatCollection";
 
 enum CatCollectorStates {
   FETCHING = "FETCHING",
-  IDLE = "IDLE"
+  LOADED = "LOADED"
 }
 
 interface CatCollectorState {
@@ -17,9 +21,9 @@ interface CatCollectorFetchingState extends CatCollectorState {
   page: number;
 }
 
-interface CatCollectorIdleState extends CatCollectorState {
-  state: CatCollectorStates.IDLE;
-  cat?: CatImage;
+interface CatCollectorLoadedState extends CatCollectorState {
+  state: CatCollectorStates.LOADED;
+  cat: CatImage;
   page: number;
 }
 
@@ -54,7 +58,7 @@ interface CatCollectorHandlers {
   [ActionTypes.LOAD]: (
     state: CatCollectorState,
     action: LoadCatAction
-  ) => CatCollectorIdleState;
+  ) => CatCollectorLoadedState;
 }
 
 function catCollectorReducer(
@@ -74,9 +78,9 @@ function catCollectorReducer(
     LOAD: (
       state: CatCollectorState,
       action: LoadCatAction
-    ): CatCollectorIdleState => {
+    ): CatCollectorLoadedState => {
       return {
-        state: CatCollectorStates.IDLE,
+        state: CatCollectorStates.LOADED,
         cat: action.payload.cat,
         page: state.page
       };
@@ -98,12 +102,25 @@ const initialState: CatCollectorState = {
   page: 0
 };
 
-const CatCollector = () => {
+type ReduxProps = ConnectedProps<typeof withCatCollection>;
+
+const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
   const [state, dispatch] = useReducer(catCollectorReducer, initialState);
+
+  const getNextCat = () => {
+    dispatch({
+      type: ActionTypes.FETCH,
+      payload: { page: state.page + 1 }
+    });
+  };
+
+  const handleIgnoreCat = R.compose(getNextCat, ignoreCat);
+  const handleCollectCat = R.compose(getNextCat, collectCat);
+
   useEffect(() => {
     const effects = {
       FETCH: () =>
-        getCatImages().then(({ data }) => {
+        getCatImages({ page: state.page }).then(({ data }) => {
           const firstCat = data[0];
           dispatch({ type: ActionTypes.LOAD, payload: { cat: firstCat } });
         })
@@ -112,14 +129,37 @@ const CatCollector = () => {
       effects.FETCH();
     }
   }, [state]);
-  if (state.state === CatCollectorStates.FETCHING) {
-    return <div>Loading</div>;
-  }
+
   return (
-    <div>
-      <img src={state.cat?.url} width="100%" />
+    <div className="flex flex-col">
+      <div className="bg-gray-400 relative pb-2/3 shadow">
+        <img
+          className="rounded rounded-b-none absolute top-0 h-full w-full object-cover"
+          src={state.cat?.url}
+          alt="cat - probably adorable"
+        />
+      </div>
+      <div className="w-full h-24 bg-white rounded-lg rounded-t-none p-2 flex items-center justify-center">
+        {state.state === CatCollectorStates.FETCHING && <p>Loading</p>}
+        {state.state === CatCollectorStates.LOADED && (
+          <>
+            <button
+              className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
+              onClick={() => state.cat && handleCollectCat({ cat: state.cat })}
+            >
+              Purrrfect
+            </button>
+            <button
+              className="rounded bg-red-700 text-white border-none shadow-md px-2"
+              onClick={() => state.cat && handleIgnoreCat({ cat: state.cat })}
+            >
+              Get Another
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
 
-export default CatCollector;
+export default withCatCollection(CatCollector);

@@ -1,0 +1,25 @@
+.collection-grid {
+  display: grid;
+  grid-auto-rows: 4rem;
+  justify-items: center;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .collection-grid {
+    grid-template-columns: 50% 50%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .collection-grid {
+    grid-auto-rows: 6rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .collection-grid {
+    grid-template-columns: 33% 33% 33%;
+    grid-auto-rows: 6rem;
+  }
+}

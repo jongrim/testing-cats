@@ -2,19 +2,8 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  height: 100vh;
-}
-
-#root,
-.App {
-  height: 100%;
-}
-
 .App {
   display: grid;
   grid-template-columns: 1fr 50% 1fr;
   column-gap: 2rem;
-  padding: 2rem 0;
 }
