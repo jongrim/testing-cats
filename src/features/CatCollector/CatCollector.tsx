@@ -133,11 +133,13 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
   return (
     <div className="flex flex-col">
       <div className="bg-gray-400 relative pb-2/3 shadow">
-        <img
-          className="rounded rounded-b-none absolute top-0 h-full w-full object-cover"
-          src={state.cat?.url}
-          alt="cat - probably adorable"
-        />
+        {state.state === CatCollectorStates.LOADED && (
+          <img
+            className="rounded rounded-b-none absolute top-0 h-full w-full object-cover"
+            src={state.cat?.url}
+            alt="cat - probably adorable"
+          />
+        )}
       </div>
       <div className="w-full h-24 bg-white rounded-lg rounded-t-none p-2 flex items-center justify-center">
         {state.state === CatCollectorStates.FETCHING && <p>Loading</p>}

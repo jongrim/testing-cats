@@ -1,13 +1,6 @@
 import axios from "axios";
 import { CatImage } from "ts/Cat";
 
-const cats = axios.create({
-  baseURL: "https://api.thecatapi.com/v1/",
-  headers: {
-    "x-api-key": "06e74068-b14e-411e-8682-978b63c833ed"
-  }
-});
-
 interface CatImageResponse {
   data: CatImage[];
   headers: {
@@ -18,7 +11,10 @@ interface CatImageResponse {
 }
 
 export const getCatImages = ({ page = 0 } = {}): Promise<CatImageResponse> => {
-  return cats.get("/images/search", {
+  return axios.get("https://api.thecatapi.com/v1/images/search", {
+    headers: {
+      "x-api-key": "06e74068-b14e-411e-8682-978b63c833ed"
+    },
     params: {
       page
     }

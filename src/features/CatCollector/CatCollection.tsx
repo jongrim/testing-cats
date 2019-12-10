@@ -9,7 +9,7 @@ const CatCollection: React.FC<{ cats: CatImage[] }> = ({ cats, children }) => {
       {children}
       <div className="collection-grid">
         {cats.map(cat => (
-          <CatBadge cat={cat} />
+          <CatBadge cat={cat} key={cat.id} />
         ))}
       </div>
     </div>
