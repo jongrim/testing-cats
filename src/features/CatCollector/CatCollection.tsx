@@ -5,14 +5,14 @@ import "./catCollection.css";
 
 const CatCollection: React.FC<{ cats: CatImage[] }> = ({ cats, children }) => {
   return (
-    <div>
+    <section>
       {children}
       <div className="collection-grid">
         {cats.map(cat => (
           <CatBadge cat={cat} key={cat.id} />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -2,8 +2,9 @@ import React, { useEffect, useReducer } from "react";
 import { ConnectedProps } from "react-redux";
 import * as R from "ramda";
 import { CatImage } from "ts/Cat";
-import { getCatImages } from "./api/cats";
+import { getCatImages, QueryParams } from "./api/cats";
 import withCatCollection from "./withCatCollection";
+import CatCollectorSearch from "./CatCollectorSearch";
 
 enum CatCollectorStates {
   FETCHING = "FETCHING",
@@ -14,17 +15,16 @@ interface CatCollectorState {
   state: CatCollectorStates;
   cat?: CatImage;
   page: number;
+  query: QueryParams;
 }
 
 interface CatCollectorFetchingState extends CatCollectorState {
   state: CatCollectorStates.FETCHING;
-  page: number;
 }
 
 interface CatCollectorLoadedState extends CatCollectorState {
   state: CatCollectorStates.LOADED;
   cat: CatImage;
-  page: number;
 }
 
 enum ActionTypes {
@@ -33,13 +33,14 @@ enum ActionTypes {
 }
 
 interface Action {
-  payload?: object;
+  payload: object;
 }
 
 interface FetchCatAction extends Action {
   type: ActionTypes.FETCH;
   payload: {
     page: number;
+    query?: QueryParams;
   };
 }
 
@@ -72,7 +73,8 @@ function catCollectorReducer(
     ): CatCollectorFetchingState => {
       return {
         state: CatCollectorStates.FETCHING,
-        page: action.payload.page
+        page: action.payload.page,
+        query: action.payload.query || state.query
       };
     },
     LOAD: (
@@ -82,7 +84,8 @@ function catCollectorReducer(
       return {
         state: CatCollectorStates.LOADED,
         cat: action.payload.cat,
-        page: state.page
+        page: state.page,
+        query: state.query
       };
     }
   };
@@ -99,7 +102,8 @@ function catCollectorReducer(
 
 const initialState: CatCollectorState = {
   state: CatCollectorStates.FETCHING,
-  page: 0
+  page: 0,
+  query: {}
 };
 
 type ReduxProps = ConnectedProps<typeof withCatCollection>;
@@ -114,16 +118,28 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
     });
   };
 
+  const searchCats = (query: QueryParams) => {
+    dispatch({
+      type: ActionTypes.FETCH,
+      payload: {
+        page: initialState.page,
+        query
+      }
+    });
+  };
+
   const handleIgnoreCat = R.compose(getNextCat, ignoreCat);
   const handleCollectCat = R.compose(getNextCat, collectCat);
 
   useEffect(() => {
     const effects = {
       FETCH: () =>
-        getCatImages({ page: state.page }).then(({ data }) => {
-          const firstCat = data[0];
-          dispatch({ type: ActionTypes.LOAD, payload: { cat: firstCat } });
-        })
+        getCatImages({ page: state.page, queryParams: state.query }).then(
+          ({ data }) => {
+            const firstCat = data[0];
+            dispatch({ type: ActionTypes.LOAD, payload: { cat: firstCat } });
+          }
+        )
     };
     if (state.state === "FETCHING") {
       effects.FETCH();
@@ -141,23 +157,28 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
           />
         )}
       </div>
-      <div className="w-full h-24 bg-white rounded-lg rounded-t-none p-2 flex items-center justify-center">
+      <div className="w-full bg-white rounded-lg rounded-t-none p-2 flex items-center justify-center">
         {state.state === CatCollectorStates.FETCHING && <p>Loading</p>}
         {state.state === CatCollectorStates.LOADED && (
-          <>
-            <button
-              className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
-              onClick={() => state.cat && handleCollectCat({ cat: state.cat })}
-            >
-              Purrrfect
-            </button>
-            <button
-              className="rounded bg-red-700 text-white border-none shadow-md px-2"
-              onClick={() => state.cat && handleIgnoreCat({ cat: state.cat })}
-            >
-              Get Another
-            </button>
-          </>
+          <div className="flex flex-col">
+            <div className="w-full flex items-center justify-center">
+              <button
+                className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
+                onClick={() =>
+                  state.cat && handleCollectCat({ cat: state.cat })
+                }
+              >
+                Purrrfect
+              </button>
+              <button
+                className="rounded bg-red-700 text-white border-none shadow-md px-2"
+                onClick={() => state.cat && handleIgnoreCat({ cat: state.cat })}
+              >
+                Get Another
+              </button>
+            </div>
+            <CatCollectorSearch searchCats={searchCats} />
+          </div>
         )}
       </div>
     </div>

@@ -19,15 +19,15 @@ The second measure of success will be feedback from the team - I expect people t
 
 These specific use cases we'll be demonstrated:
 
-- [ ] Pure JS / TS functions
+- [x] Pure JS / TS functions
 
-- [ ] Mocking imports
+- [x] Mocking imports
 
-- [ ] Functional component using hooks
+- [x] Functional component using hooks
 
-- [ ] Redux connected component
+- [x] Redux connected component
 
-- [ ] Redux reducer
+- [x] Redux reducer
 
 - [ ] Redux thunk
 
