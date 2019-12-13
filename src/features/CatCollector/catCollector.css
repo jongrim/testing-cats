@@ -1,0 +1,16 @@
+.visibleTransition {
+  transition: all 0.3s;
+}
+
+.dropOut {
+  transform: translateY(1em);
+  opacity: 0%;
+}
+
+.fadeUp {
+  opacity: 100%;
+}
+
+.yOffset {
+  transform: translateY(1em);
+}

@@ -33,7 +33,6 @@ export const getCatImages = (
   });
 };
 
-// @ts-ignore
 export const catApi = (endpoint: string, params: object) => {
   return fetch(`https://api.thecatapi.com/v1${endpoint}`, params).then(resp =>
     resp.json()

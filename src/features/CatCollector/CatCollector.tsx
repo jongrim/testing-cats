@@ -5,6 +5,7 @@ import { CatImage } from "ts/Cat";
 import { getCatImages, QueryParams } from "./api/cats";
 import withCatCollection from "./withCatCollection";
 import CatCollectorSearch from "./CatCollectorSearch";
+import "./catCollector.css";
 
 enum CatCollectorStates {
   FETCHING = "FETCHING",
@@ -110,6 +111,7 @@ type ReduxProps = ConnectedProps<typeof withCatCollection>;
 
 const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
   const [state, dispatch] = useReducer(catCollectorReducer, initialState);
+  const [searchFormVisible, setSearchFormVisible] = React.useState(false);
 
   const getNextCat = () => {
     dispatch({
@@ -160,25 +162,45 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
       <div className="w-full bg-white rounded-lg rounded-t-none p-2 flex items-center justify-center">
         {state.state === CatCollectorStates.FETCHING && <p>Loading</p>}
         {state.state === CatCollectorStates.LOADED && (
-          <div className="flex flex-col">
-            <div className="w-full flex items-center justify-center">
+          <>
+            <div
+              className={`flex flex-col w-full visibleTransition ${
+                searchFormVisible ? "invisible dropOut" : "visible"
+              }`}
+            >
+              <div className="w-full flex items-center justify-center">
+                <button
+                  className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
+                  onClick={() =>
+                    state.cat && handleCollectCat({ cat: state.cat })
+                  }
+                >
+                  Purrrfect
+                </button>
+                <button
+                  className="rounded bg-red-700 text-white border-none shadow-md px-2"
+                  onClick={() =>
+                    state.cat && handleIgnoreCat({ cat: state.cat })
+                  }
+                >
+                  Get Another
+                </button>
+              </div>
               <button
-                className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
-                onClick={() =>
-                  state.cat && handleCollectCat({ cat: state.cat })
-                }
+                onClick={() => setSearchFormVisible(true)}
+                className="my-2 bg-teal-600 text-white shadow-md rounded w-1/2 ml-auto mr-auto"
               >
-                Purrrfect
-              </button>
-              <button
-                className="rounded bg-red-700 text-white border-none shadow-md px-2"
-                onClick={() => state.cat && handleIgnoreCat({ cat: state.cat })}
-              >
-                Get Another
+                Or search for your dream cat
               </button>
             </div>
-            <CatCollectorSearch searchCats={searchCats} />
-          </div>
+            <CatCollectorSearch
+              searchCats={R.compose(
+                () => setSearchFormVisible(false),
+                searchCats
+              )}
+              visible={searchFormVisible}
+            />
+          </>
         )}
       </div>
     </div>

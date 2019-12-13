@@ -1,4 +1,3 @@
-// import "./api/__mocks__/cats";
 import React from "react";
 import CatCollector from "./CatCollector";
 import { Provider } from "react-redux";
