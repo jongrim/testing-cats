@@ -14,7 +14,6 @@ const resp = { data: cats };
 export const getCatImages = jest.fn().mockResolvedValue(resp);
 
 export const catApi = jest.fn((endpoint: "categories" | "breeds") => {
-  console.log("mock called");
   const responses = {
     categories: () => Promise.resolve(categories),
     breeds: () => Promise.resolve(breeds)

@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer } from "react";
-import { ConnectedProps } from "react-redux";
+import { useDispatch, ConnectedProps } from "react-redux";
 import * as R from "ramda";
 import { CatImage } from "ts/Cat";
 import { getCatImages, QueryParams } from "./api/cats";
+import { favoriteCat } from "./redux";
 import withCatCollection from "./withCatCollection";
 import CatCollectorSearch from "./CatCollectorSearch";
 import "./catCollector.css";
@@ -110,6 +111,7 @@ const initialState: CatCollectorState = {
 type ReduxProps = ConnectedProps<typeof withCatCollection>;
 
 const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
+  const reduxDispatch = useDispatch();
   const [state, dispatch] = useReducer(catCollectorReducer, initialState);
   const [searchFormVisible, setSearchFormVisible] = React.useState(false);
 
@@ -171,19 +173,23 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
               <div className="w-full flex items-center justify-center">
                 <button
                   className="rounded bg-blue-700 text-white border-none shadow-md mr-2 px-2"
-                  onClick={() =>
-                    state.cat && handleCollectCat({ cat: state.cat })
-                  }
+                  onClick={() => state.cat && handleCollectCat(state.cat)}
                 >
                   Purrrfect
                 </button>
                 <button
-                  className="rounded bg-red-700 text-white border-none shadow-md px-2"
-                  onClick={() =>
-                    state.cat && handleIgnoreCat({ cat: state.cat })
-                  }
+                  className="rounded bg-red-700 text-white border-none shadow-md px-2 mr-2"
+                  onClick={() => state.cat && handleIgnoreCat(state.cat)}
                 >
                   Get Another
+                </button>
+                <button
+                  className="rounded bg-green-700 text-white border-none shadow-md px-2"
+                  onClick={() =>
+                    state.cat && reduxDispatch(favoriteCat(state.cat))
+                  }
+                >
+                  Keep it Forever
                 </button>
               </div>
               <button
