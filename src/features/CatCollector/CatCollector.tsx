@@ -189,7 +189,7 @@ const CatCollector: React.FC<ReduxProps> = ({ collectCat, ignoreCat }) => {
                     state.cat && reduxDispatch(favoriteCat(state.cat))
                   }
                 >
-                  Keep it Forever
+                  Keep it Furever
                 </button>
               </div>
               <button

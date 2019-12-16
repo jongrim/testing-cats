@@ -18,4 +18,15 @@ describe("Cat Collector", () => {
     cy.findByLabelText("Breed:").select("Bengal");
     cy.findByText("FIND THAT CAT").click();
   });
+  it("can favorite a cat so it is there after reload", () => {
+    cy.findByText("Keep it Furever").click();
+    cy.findByText("Your Kitty Collection")
+      .siblings(".collection-grid")
+      .find("img")
+      .should("have.length", 2);
+    cy.reload();
+    cy.findByText("Your Kitty Collection")
+      .siblings(".collection-grid")
+      .find("img");
+  });
 });

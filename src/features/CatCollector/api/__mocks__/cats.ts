@@ -13,10 +13,12 @@ const cats = [
 const resp = { data: cats };
 export const getCatImages = jest.fn().mockResolvedValue(resp);
 
-export const catApi = jest.fn((endpoint: "categories" | "breeds") => {
-  const responses = {
-    categories: () => Promise.resolve(categories),
-    breeds: () => Promise.resolve(breeds)
-  };
-  return responses[endpoint];
+export const catApi = jest.fn((endpoint: "/categories" | "/breeds") => {
+  return new Promise(resolve => {
+    const responses = {
+      "/categories": categories,
+      "/breeds": breeds
+    };
+    resolve(responses[endpoint]);
+  });
 });

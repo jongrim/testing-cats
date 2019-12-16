@@ -65,7 +65,7 @@ function fakeFavoriteAPI(cat: CatImage) {
         }
       )(cat);
       resolve();
-    }, 2000);
+    }, 0);
   });
 }
 

@@ -36,7 +36,7 @@ function CatCollectorSearch({ searchCats, visible }: Props) {
         >
           <option value="">Select a category</option>
           {categories.map((opt: { id: number; name: string }) => (
-            <option value={opt.id} key={opt.id}>
+            <option value={opt.id} key={opt.id} data-testid={opt.id}>
               {opt.name}
             </option>
           ))}
@@ -52,7 +52,7 @@ function CatCollectorSearch({ searchCats, visible }: Props) {
         >
           <option value="">Select a breed</option>
           {breeds.map((opt: { id: number; name: string }) => (
-            <option value={opt.id} key={opt.id}>
+            <option value={opt.id} key={opt.id} data-testid={opt.id}>
               {opt.name}
             </option>
           ))}

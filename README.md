@@ -42,6 +42,8 @@ These specific use cases we'll be demonstrated:
 
 - [x] [API Testing](./src/features/CatCollector/api/cats.test.ts)
 
+- [x] [e2e tests with Cypress](./cypress/integration/catCollector.spec.js)
+
 - [ ] State machine driven component (stretch goal as it's unclear if we'll make use of these)
 
 ## Use cases outside of scope
