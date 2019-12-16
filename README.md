@@ -20,16 +20,23 @@ The second measure of success will be feedback from the team - I expect people t
 These specific use cases we'll be demonstrated:
 
 - [x] Pure JS / TS functions
+- - [Util function testing](./src/features/CatCollector/utils.test.ts)
 
 - [x] Mocking imports
+- - [Creating a mock version of an api](./src/features/CatCollector/api/__mocks__/cats.ts)
+- - [Mocking endpoints for integration testing](./src/App.test.tsx)
 
 - [x] Functional component using hooks
+- - [Testing a functional component with react-testing-library](./src/features/CatCollector/CatCollector.test.tsx)
 
 - [x] Redux connected component
+- - [Testing a functional component with react-testing-library](./src/features/CatCollector/CatCollector.test.tsx)
 
-- [x] Redux reducer
+- [x] [Redux reducer](./src/features/CatCollector/redux.test.ts)
 
-- [ ] Redux thunk
+- [x] [Redux thunk](./src/features/CatCollector/redux.test.ts)
+
+- [x] [API Testing](./src/features/CatCollector/api/cats.test.ts)
 
 - [ ] State machine driven component (stretch goal as it's unclear if we'll make use of these)
 
